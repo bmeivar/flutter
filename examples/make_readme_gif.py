@@ -32,7 +32,7 @@ VIEW = 12.0  # visible time span of the scrolling panels [s]
 FRAME_STEP = 0.08  # signal time per GIF frame [s] (2x real time)
 FPS = 25  # GIF delays are whole centiseconds; 25 fps keeps the file small
 HOLD_FRAMES = 3 * FPS  # pause on the last frame before looping
-DPI = 80
+DPI = 150
 
 # palette
 SURFACE = "#fcfcfb"
@@ -226,7 +226,7 @@ def main():
                   savefig_kwargs={"facecolor": SURFACE})
         subprocess.run(
             ["ffmpeg", "-y", "-loglevel", "error", "-i", video, "-filter_complex",
-             "[0:v]split[a][b];[a]palettegen=max_colors=64:stats_mode=full[p];"
+             "[0:v]split[a][b];[a]palettegen=max_colors=128:stats_mode=full[p];"
              "[b][p]paletteuse=dither=none:diff_mode=rectangle",
              "-loop", "0", out],
             check=True,
