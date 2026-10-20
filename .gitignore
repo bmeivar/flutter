@@ -21,3 +21,5 @@ ven.pdf
 # Paper: not in git until co-author approval
 paper/
 *.docx
+*.egg-info/
+.pytest_cache/

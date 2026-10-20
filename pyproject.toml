@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flutter-precursor"
+version = "1.0.0"
+description = "Model-free aeroelastic flutter early warning from measured sensor signals"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Boaz Meivar", email = "bmeivar@gmail.com" },
+    { name = "Moti Karpel" },
+]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy",
+    "scikit-learn",
+    "matplotlib",
+    "tqdm",
+    "lempel-ziv-complexity",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pillow"]
+
+[project.urls]
+Paper = "https://doi.org/10.2514/1.J064327"
+
+[tool.setuptools]
+py-modules = ["flutter_precursor"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

@@ -91,7 +91,7 @@ class flutterFeatureExtractor:
         i = 0
         dataset = []
         labels = []
-        while i < (len(signal) - self.numArFeatures - 1):
+        while i < (len(signal) - self.numArFeatures):
             dataset.append(signal[i : (i + self.numArFeatures)])
             labels.append(signal[i + self.numArFeatures])
             i += 1
@@ -106,12 +106,14 @@ class flutterFeatureExtractor:
         """
         fft_signal = np.abs(np.fft.fft(signal)) ** 2
         fft_signal = fft_signal / sum(fft_signal)
+        fft_signal = fft_signal[fft_signal > 0]  # 0 * log(0) = 0
+        spectral_entropy = -np.sum(fft_signal * np.log2(fft_signal)) / np.log2(
+            self.windowSize
+        )
         if self.calibrationFlag:
-            return -np.sum(fft_signal * np.log2(fft_signal) // np.log2(self.windowSize))
+            return spectral_entropy
         else:
-            self.spectralEntropy.append(
-                -np.sum(fft_signal * np.log2(fft_signal)) / np.log2(self.windowSize)
-            )
+            self.spectralEntropy.append(spectral_entropy)
 
     def calcArCod(self, signal):
         """
@@ -155,6 +157,7 @@ class flutterFeatureExtractor:
         for j in range(len(signal)):
             string_signal += binary_signal[j]
         N = len(string_signal)
+        # natural log; the default threshold (1.15) was set with this normalization
         b = N / np.log(N)
 
         if self.calibrationFlag:
@@ -220,14 +223,11 @@ class flutterFeatureExtractor:
 
     def calcFeatures(self):
         if self.signalLength > self.windowSize:
-            self.calcSpectralEntropy(
-                self.onlineSignal[(self.signalLength - self.windowSize) : -1]
-            )
-            self.calcArCod(
-                self.onlineSignal[(self.signalLength - self.windowSize) : -1]
-            )
-            self.calcUval(self.onlineSignal[(self.signalLength - self.windowSize) : -1])
-            self.calcLZC(self.onlineSignal[(self.signalLength - self.windowSize) : -1])
+            window = self.onlineSignal[-self.windowSize :]
+            self.calcSpectralEntropy(window)
+            self.calcArCod(window)
+            self.calcUval(window)
+            self.calcLZC(window)
 
 
 #%% Implantation  Example:
@@ -246,6 +246,9 @@ if __name__ == "__main__":
     # Define time vector for test signal:
     time = np.arange(0, signal_length, step_size)
     
+    # Setting random seed for repeatability
+    np.random.seed(42)
+
     # Base signal:
     signal = np.random.normal(size=signal_length)
     
@@ -253,9 +256,6 @@ if __name__ == "__main__":
     signal[-1001:-1] += np.sin(time[-1001:-1]) * 4 * np.arange(0, 1, 0.001)
     calibration_start = 0
     calibration_stop = 2000
-    
-    # Setting random seed for repeatability
-    np.random.seed(42)
     
     example = flutterFeatureExtractor(
         "example", windowSize, 0, calibrationFlag=False, numArFeatures=2

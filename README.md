@@ -1,5 +1,7 @@
 # Data-Driven Aeroelastic Flutter Precursor
 
+[![tests](https://github.com/bmeivar/flutter/actions/workflows/tests.yml/badge.svg)](https://github.com/bmeivar/flutter/actions/workflows/tests.yml)
+
 Code for **"Data-Driven Approach to the Development of an Aeroelastic Flutter Precursor"**
 by Boaz Meivar and Moti Karpel (Technion), *AIAA Journal*, Vol. 63, No. 1, 2025, pp. 174–183,
 [doi:10.2514/1.J064327](https://doi.org/10.2514/1.J064327).
@@ -13,7 +15,7 @@ the aircraft or of the flutter mechanism.
 *The sensor signal is streamed one sample at a time, and the plots scroll with the last 12 s.
 As the modal damping (bottom strip: ground truth, never seen by the algorithm) decreases toward
 zero, the response becomes more regular and **arCod** rises above its threshold. The warning
-(shaded) is issued 7.1 s before flutter onset (damping = 0). The signal is synthetic: one
+(shaded) is issued 7.0 s before flutter onset (damping = 0). The signal is synthetic: one
 4.4 Hz mode driven by turbulence, with nonlinear damping that turns the post-flutter response into a
 limit cycle (see [`examples/demo_signal.py`](examples/demo_signal.py)).*
 
@@ -40,9 +42,10 @@ In the A3TB UAV flight test, this gave flutter warnings up to 6 s before critica
 ## Quick start
 
 ```bash
-pip install -r requirements.txt
+pip install -e ".[dev]"                # or: pip install -r requirements.txt
 python flutter_precursor.py            # example on a synthetic signal
-python examples/make_readme_gif.py     # regenerates assets/arcod_demo.gif
+python examples/make_readme_gif.py     # regenerates assets/arcod_demo.gif (needs ffmpeg)
+pytest                                 # feature unit tests
 ```
 
 Online use:
@@ -68,6 +71,7 @@ for i, sample in enumerate(stream):
 | `flutter_precursor.py` | Feature extractor: arCod, U-val, Spectral Entropy, LZC, and calibration |
 | `examples/demo_signal.py` | Synthetic flutter-approach signal (Hopf onset plus limit cycle) |
 | `examples/make_readme_gif.py` | Script that renders the GIF above |
+| `tests/` | Unit tests: windowing, and feature trends from noise to sine (paper Fig. 7) |
 
 ## Citation
 
@@ -83,6 +87,10 @@ for i, sample in enumerate(stream):
   doi     = {10.2514/1.J064327}
 }
 ```
+
+## License
+
+MIT. See [LICENSE](LICENSE).
 
 ## Acknowledgments
 

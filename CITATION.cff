@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the paper below."
+title: "Data-Driven Approach to the Development of an Aeroelastic Flutter Precursor"
+authors:
+  - family-names: Meivar
+    given-names: Boaz
+    affiliation: "Technion - Israel Institute of Technology"
+  - family-names: Karpel
+    given-names: Moti
+    affiliation: "Technion - Israel Institute of Technology"
+license: MIT
+repository-code: "https://github.com/bmeivar/flutter"
+preferred-citation:
+  type: article
+  title: "Data-Driven Approach to the Development of an Aeroelastic Flutter Precursor"
+  authors:
+    - family-names: Meivar
+      given-names: Boaz
+    - family-names: Karpel
+      given-names: Moti
+  journal: "AIAA Journal"
+  volume: 63
+  issue: 1
+  start: 174
+  end: 183
+  year: 2025
+  doi: "10.2514/1.J064327"
