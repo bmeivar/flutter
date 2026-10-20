@@ -1,0 +1,6 @@
+numpy
+scikit-learn
+matplotlib
+tqdm
+lempel-ziv-complexity
+pillow
